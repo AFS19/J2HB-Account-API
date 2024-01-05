@@ -11,4 +11,8 @@ class WorkProcess extends Model
 
     /* The attributes that are mass assignable */
     protected $fillable = ['name', 'auto_ecole_id', 'steps'];
+
+    protected $casts = [
+        'steps' => 'array',
+    ];
 }

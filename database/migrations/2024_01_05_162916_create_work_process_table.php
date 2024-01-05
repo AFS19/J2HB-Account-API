@@ -18,7 +18,7 @@ return new class extends Migration
             $table->bigInteger('auto_ecole_id')->unsigned();
             $table->foreign('auto_ecole_id')->references('id')->on('auto_ecoles')->onDelete('cascade');
 
-            $table->array('steps');
+            $table->json('steps');
             $table->timestamps();
         });
     }
