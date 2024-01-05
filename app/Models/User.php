@@ -6,6 +6,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Kodeine\Metable\Metable;
 use Laratrust\Contracts\LaratrustUser;
 use Laratrust\Traits\HasRolesAndPermissions;
 use Laravel\Sanctum\HasApiTokens;
@@ -14,6 +15,9 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
 class User extends Authenticatable implements LaratrustUser, JWTSubject
 {
     use HasApiTokens, HasFactory, Notifiable, HasRolesAndPermissions;
+
+    /* use metable */
+    use Metable;
 
     /**
      * The attributes that are mass assignable.
