@@ -14,10 +14,10 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class User extends Authenticatable implements LaratrustUser, JWTSubject
 {
-    use HasApiTokens, HasFactory, Notifiable, HasRolesAndPermissions;
+    use HasApiTokens, HasFactory, Notifiable, HasRolesAndPermissions, Metable;
 
-    /* use metable */
-    use Metable;
+    /* Meta table for User model */
+    protected $metaTable = "users_meta";
 
     /**
      * The attributes that are mass assignable.
