@@ -18,7 +18,7 @@ return [
         ],
         'gerant' => [
             'users' => 'c,r,u,d',
-            'auto_ecoles' => 'r,u',
+            'auto_ecoles' => 'c,r,u',
             'work_process' => 'c,r,u,d'
         ],
         'moniteur' => [
