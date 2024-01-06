@@ -23,9 +23,10 @@ class RegisterRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'min:3', 'max:20'],
-            'tel' => ['required', 'string', 'min:10', 'regex:/^(06|07)\d{8}$/'],
+            'phone' => ['required', 'string', 'min:10', 'regex:/^(06|07)\d{8}$/'],
             'email' => ['required', 'string', 'email:filter', 'unique:users'],
             'password' => ['required', 'string', 'min:6', 'confirmed'],
+            'role' => ['required', 'string', 'exists:roles,name']
         ];
     }
 }

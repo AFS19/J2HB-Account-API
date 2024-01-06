@@ -16,12 +16,14 @@ class AuthController extends Controller
     {
         try {
             # data save & create new user
-            User::create([
+            $user = User::create([
                 "name" => $request->name,
-                "tel" => $request->tel,
+                "phone" => $request->phone,
                 "email" => $request->email,
                 "password" => bcrypt($request->password),
+                "role" => $request->role,
             ]);
+            $user->addRole($request->role);
 
             # return success response
             return response()->json([
@@ -67,13 +69,13 @@ class AuthController extends Controller
     }
 
     /* Register method */
-    public function responseWithToken($user, $token)
+    protected function responseWithToken($token, $user, $message)
     {
         return response()->json([
-            'status' => 'success',
-            'user' => $user,
-            'access_token' => $token,
-            'type' => 'bearer'
+            "message" => $message,
+            "user" => $user,
+            "access_token" => $token,
+            "token_type" => 'bearer',
         ]);
     }
 }
