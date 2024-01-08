@@ -18,6 +18,8 @@ return new class extends Migration
             $table->bigInteger('gerant_id')->unsigned();
             $table->foreign('gerant_id')->references('id')->on('users')->onDelete('cascade');
 
+            $table->json("permis_list")->include("AM", "A1", "A", "B", "C", "D", "EB", "EC", "ED");
+
             $table->timestamps();
         });
     }

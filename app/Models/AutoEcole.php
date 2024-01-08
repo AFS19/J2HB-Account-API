@@ -15,4 +15,8 @@ class AutoEcole extends Model
 
     /* The attributes that are mass assignable */
     protected $fillable = ['name', 'gerant_id'];
+
+    protected $casts = [
+        "permis_list" => "array",
+    ];
 }

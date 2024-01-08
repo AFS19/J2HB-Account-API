@@ -21,9 +21,8 @@ class AuthController extends Controller
                 "phone" => $request->phone,
                 "email" => $request->email,
                 "password" => bcrypt($request->password),
-                "role" => $request->role,
             ]);
-            $user->addRole($request->role);
+            $user->addRole('candidat');
 
             # return success response
             return response()->json([

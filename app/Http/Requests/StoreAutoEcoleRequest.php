@@ -22,7 +22,8 @@ class StoreAutoEcoleRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'name' => ["required", "string", "max:100"],
+            'permis_list' => ["required", "string"],
         ];
     }
 }
