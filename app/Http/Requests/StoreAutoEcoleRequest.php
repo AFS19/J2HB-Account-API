@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
 class StoreAutoEcoleRequest extends FormRequest
 {
@@ -11,7 +12,7 @@ class StoreAutoEcoleRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,8 +23,9 @@ class StoreAutoEcoleRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ["required", "string", "max:100"],
-            'permis_list' => ["required", "string"],
+            'name' => ['required', 'string', 'max:100'],
+            'gerant_id' => ['reqiored', 'exists:users,id'],
+            'permis_list' => ['required', 'array', 'in:AM,A1,A,B,C,D,EB,EC,ED'],
         ];
     }
 }

@@ -9,12 +9,11 @@ use Illuminate\Notifications\Notifiable;
 use Kodeine\Metable\Metable;
 use Laratrust\Contracts\LaratrustUser;
 use Laratrust\Traits\HasRolesAndPermissions;
-use Laravel\Sanctum\HasApiTokens;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class User extends Authenticatable implements LaratrustUser, JWTSubject
 {
-    use HasApiTokens, HasFactory, Notifiable, HasRolesAndPermissions, Metable;
+    use HasFactory, Notifiable, HasRolesAndPermissions, Metable;
 
     /* Meta table for User model */
     protected $metaTable = "users_meta";

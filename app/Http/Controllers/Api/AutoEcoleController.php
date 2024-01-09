@@ -9,6 +9,11 @@ use App\Models\AutoEcole;
 
 class AutoEcoleController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('gerant')->only('store');
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -22,7 +27,16 @@ class AutoEcoleController extends Controller
      */
     public function store(StoreAutoEcoleRequest $request)
     {
-        //
+        $autoEcole = AutoEcole::create([
+            'name' => $request->name,
+            'gerant_id' => auth()->user()->id,
+            'permis_list' => $request->permis_list,
+        ]);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Auto ecole created successfully'
+        ]);
     }
 
     /**

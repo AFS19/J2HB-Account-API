@@ -14,6 +14,7 @@ return [
     'roles_structure' => [
         'admin' => [
             'users' => 'c,r,u,d',
+            'payments' => 'c,r,u,d',
             'auto_ecoles' => 'c,r,u,d',
         ],
         'gerant' => [

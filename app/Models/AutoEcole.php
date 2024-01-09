@@ -14,7 +14,7 @@ class AutoEcole extends Model
     protected $metaTable = "auto_ecole_meta";
 
     /* The attributes that are mass assignable */
-    protected $fillable = ['name', 'gerant_id'];
+    protected $fillable = ['name', 'gerant_id', 'permis_list'];
 
     protected $casts = [
         "permis_list" => "array",
