@@ -23,7 +23,7 @@ class StoreAutoEcoleRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required', 'string', 'max:100'],
+            'name' => ['required', 'string', 'max:100', "unique:auto_ecoles"],
             'gerant_id' => ['reqiored', 'exists:users,id'],
             'permis_list' => ['required', 'array', 'in:AM,A1,A,B,C,D,EB,EC,ED'],
         ];

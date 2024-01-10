@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('auto_ecoles', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('name')->unique();
 
             $table->bigInteger('gerant_id')->unsigned();
             $table->foreign('gerant_id')->references('id')->on('users')->onDelete('cascade');
