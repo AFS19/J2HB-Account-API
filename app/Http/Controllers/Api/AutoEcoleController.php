@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreAutoEcoleRequest;
 use App\Http\Requests\UpdateAutoEcoleRequest;
+use App\Http\Resources\AutoEcoleResource;
 use App\Models\AutoEcole;
 
 use function PHPUnit\Framework\isEmpty;
@@ -21,8 +22,8 @@ class AutoEcoleController extends Controller
      */
     public function index()
     {
-        $autoEcoles =  AutoEcole::all();
-        return response()->json($autoEcoles);
+        $autoEcoles =  AutoEcoleResource::collection(AutoEcole::paginate());
+        return $autoEcoles;
     }
 
     /**
@@ -51,7 +52,7 @@ class AutoEcoleController extends Controller
         $user = auth()->user();
 
         if ($user->hasRole("gerant") && $autoEcole->gerant_id === $user->id) {
-            return response()->json($autoEcole);
+            return new AutoEcoleResource($autoEcole);
         } else {
             return response()->json(['message' => 'Unauthorized'], 403);
         }
@@ -68,7 +69,7 @@ class AutoEcoleController extends Controller
         ]);
         return response()->json([
             'message' => 'Updated success',
-            'data' => $autoEcole,
+            'data' => new AutoEcoleResource($autoEcole),
         ]);
     }
 
