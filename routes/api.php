@@ -39,6 +39,6 @@ Route::group(["middleware" => "auth:api"], function () {
         Route::get('autoEcoles/{autoEcole}', 'show')->name('show_auto_ecole');
         Route::post('autoEcoles', 'store')->name('create_auto_ecole');
         Route::put('autoEcoles/{autoEcole}', 'update')->name('update_auto_ecole');
-        Route::delete('autoEcoles', 'destroy')->name('delete_auto_ecole');
+        Route::delete('autoEcoles/{autoEcole}', 'destroy')->name('delete_auto_ecole');
     });
 });

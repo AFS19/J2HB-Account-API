@@ -11,7 +11,7 @@ class UpdateAutoEcoleRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,8 @@ class UpdateAutoEcoleRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'name' => ['required', 'string', 'max:100'],
+            'permis_list' => ['required', 'array', 'in:AM,A1,A,B,C,D,EB,EC,ED'],
         ];
     }
 }

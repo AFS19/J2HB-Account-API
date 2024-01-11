@@ -62,7 +62,6 @@ class AutoEcoleController extends Controller
      */
     public function update(UpdateAutoEcoleRequest $request, AutoEcole $autoEcole)
     {
-        $autoEcole = AutoEcole::find($autoEcole);
         $autoEcole->update([
             'name' => $request->name,
             'permis_list' => $request->permis_list,
@@ -78,8 +77,7 @@ class AutoEcoleController extends Controller
      */
     public function destroy(AutoEcole $autoEcole)
     {
-        $autoEcole = AutoEcole::findOrFail($autoEcole);
         $autoEcole->delete();
-        return response('Deleted Success', 204);
+        return response()->json(['message' => 'Deleted Success'], 204);
     }
 }
