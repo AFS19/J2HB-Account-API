@@ -11,7 +11,7 @@ class UpdateWorkProcessRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,9 @@ class UpdateWorkProcessRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'name' => ['required'],
+            'auto_ecole_id' => 'exists:auto_ecoles:id',
+            'steps' => ['required', 'array']
         ];
     }
 }

@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreWorkProcessRequest;
 use App\Http\Requests\UpdateWorkProcessRequest;
+use App\Http\Resources\WorkProcessResource;
 use App\Models\WorkProcess;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class WorkProcessController extends Controller
 {
@@ -14,7 +16,8 @@ class WorkProcessController extends Controller
      */
     public function index()
     {
-        //
+        $workProcess = WorkProcessResource::collection(WorkProcess::paginate());
+        return $workProcess;
     }
 
     /**
@@ -22,7 +25,11 @@ class WorkProcessController extends Controller
      */
     public function store(StoreWorkProcessRequest $request)
     {
-        //
+        WorkProcess::create($request->validated());
+        response()->json([
+            'status' => 'success',
+            'message' => 'work process created successfully'
+        ], 201);
     }
 
     /**
@@ -30,7 +37,11 @@ class WorkProcessController extends Controller
      */
     public function show(WorkProcess $workProcess)
     {
-        //
+        try {
+            return response()->json($workProcess);
+        } catch (ModelNotFoundException $exception) {
+            return response()->json(['message' => 'Work process not found'], 404);
+        }
     }
 
     /**
@@ -38,7 +49,15 @@ class WorkProcessController extends Controller
      */
     public function update(UpdateWorkProcessRequest $request, WorkProcess $workProcess)
     {
-        //
+        try {
+            $workProcess->update($request->validated());
+            return response()->json([
+                'message' => 'work process updated successfully',
+                'data' => $workProcess
+            ]);
+        } catch (ModelNotFoundException $exception) {
+            return response()->json(['message' => 'Work process not found'], 404);
+        }
     }
 
     /**
@@ -46,6 +65,11 @@ class WorkProcessController extends Controller
      */
     public function destroy(WorkProcess $workProcess)
     {
-        //
+        try {
+            $workProcess->delete();
+            return response()->json(['message' => 'work process deleted successfully']);
+        } catch (ModelNotFoundException $exception) {
+            return response()->json(['message' => 'Work process not found'], 404);
+        }
     }
 }
