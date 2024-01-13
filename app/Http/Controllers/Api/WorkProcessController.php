@@ -26,7 +26,7 @@ class WorkProcessController extends Controller
     public function store(StoreWorkProcessRequest $request)
     {
         WorkProcess::create($request->validated());
-        response()->json([
+        return response()->json([
             'status' => 'success',
             'message' => 'work process created successfully'
         ], 201);
@@ -53,7 +53,7 @@ class WorkProcessController extends Controller
             $workProcess->update($request->validated());
             return response()->json([
                 'message' => 'work process updated successfully',
-                'data' => $workProcess
+                'data' => new WorkProcessResource($workProcess),
             ]);
         } catch (ModelNotFoundException $exception) {
             return response()->json(['message' => 'Work process not found'], 404);

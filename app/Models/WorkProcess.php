@@ -15,4 +15,6 @@ class WorkProcess extends Model
     protected $casts = [
         'steps' => 'array',
     ];
+
+    protected $table = "work_process";
 }

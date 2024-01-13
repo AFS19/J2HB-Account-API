@@ -23,7 +23,7 @@ class StoreWorkProcessRequest extends FormRequest
     {
         return [
             'name' => ['required'],
-            'auto_ecole_id' => 'exists:auto_ecoles:id',
+            'auto_ecole_id' => 'exists:auto_ecoles,id',
             'steps' => ['required', 'array']
         ];
     }
