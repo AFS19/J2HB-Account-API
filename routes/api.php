@@ -14,6 +14,7 @@ Route::prefix('auth')->group(function () {
 });
 
 Route::group(["middleware" => "auth:api"], function () {
+    Route::get('profile', [AuthController::class, 'profile'])->name("profile");
     Route::get('refresh', [AuthController::class, 'refreshToken'])->name("refreshToken");
     Route::get('logout', [AuthController::class, 'logout'])->name("logout");
 

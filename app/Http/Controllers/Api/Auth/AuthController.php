@@ -33,7 +33,6 @@ class AuthController extends Controller
         } catch (\Throwable $th) {
 
             return response()->json([
-                "status" => "failed",
                 "error" => $th->getMessage(),
             ], 500);
         }
@@ -42,30 +41,68 @@ class AuthController extends Controller
     /* Login method */
     public function login(LoginRequest $request)
     {
-        # jwt auth and attempt
-        $credentials = $request->only('email', 'password');
-        if (!$token = JWTAuth::attempt($credentials)) {
-            return response()->json(['error' => 'Unauthorized'], 401);
+        try {
+            # jwt auth and attempt
+            $credentials = $request->only('email', 'password');
+            if (!$token = JWTAuth::attempt($credentials)) {
+                return response()->json(['error' => 'Unauthorized'], 401);
+            }
+            #response
+            return $this->responseWithToken($token, $credentials, "logged in successfully");
+        } catch (\Throwable $th) {
+            return response()->json([
+                "error" => $th->getMessage(),
+            ], 500);
         }
-
-        #response
-        return $this->responseWithToken($token, $credentials, "logged in successfully");
     }
 
     /* Refresh token method */
     public function refreshToken()
     {
-        return $this->responseWithToken(Auth::refresh(), Auth::user()->only('name', 'email'), "new access token generated successfully");
+        try {
+            return $this->responseWithToken(Auth::refresh(), Auth::user()->only('name', 'email'), "new access token generated successfully");
+        } catch (\Throwable $th) {
+            return response()->json([
+                "error" => $th->getMessage(),
+            ], 500);
+        }
+    }
+
+    # use profile method
+    public function profile()
+    {
+        try {
+            $user = auth()->user();
+            $credentials = [
+                "name" => $user?->name,
+                "email" => $user?->email,
+            ];
+            return response()->json([
+                "message" => "Profile data",
+                "user" => $credentials,
+            ]);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'message' => 'server error',
+                'error' => $th->getMessage(),
+            ], 500);
+        }
     }
 
     /* Logout method */
     public function logout()
     {
-        Auth::logout();
-        return response()->json([
-            "status" => "success",
-            'message' => "Logged out successfully",
-        ]);
+        try {
+            Auth::logout();
+            return response()->json([
+                "status" => "success",
+                'message' => "Logged out successfully",
+            ]);
+        } catch (\Throwable $th) {
+            return response()->json([
+                "error" => $th->getMessage(),
+            ], 500);
+        }
     }
 
     /* Register method */
