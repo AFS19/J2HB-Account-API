@@ -2,28 +2,42 @@
 
 namespace App\Http\Controllers\Api\Auth;
 
+use App\Helpers\Helper;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends Controller
 {
     /* Register method */
-    public function register(RegisterRequest $request)
+    public function register(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|between:2,100',
+            'phone' => 'required|string|min:10|regex:/^(06|07)\d{8}$/',
+            'email' => 'required|string|email|max:100|unique:users',
+            'password' => 'required|string|confirmed|min:6',
+            'city' => 'required|string',
+            'reason' =>  'required|string',
+        ]);
+        if ($validator->fails()) {
+            return Helper::handleValidationErrors($validator);
+        }
         try {
             # data save & create new user
-            $user = User::create([
-                "name" => $request->name,
-                "phone" => $request->phone,
-                "email" => $request->email,
-                "password" => bcrypt($request->password),
-            ]);
+            // $user = User::create($request->validated());
+            $user = new User;
+            $user->setAttributes($validator->validated());
             # har code to assign condidat role
-            $user->addRole('condidat');
+            // $user->addRole('condidat');
+            // $user->setMeta('city', "test city");
+            // $user->setMeta('reason', "test reason");
+            // $user->saveMeta();
 
             # return success response
             return response()->json([
@@ -94,14 +108,9 @@ class AuthController extends Controller
     {
         try {
             Auth::logout();
-            return response()->json([
-                "status" => "success",
-                'message' => "Logged out successfully",
-            ]);
+            return Helper::handleSuccessMessage("Logged out successfully");
         } catch (\Throwable $th) {
-            return response()->json([
-                "error" => $th->getMessage(),
-            ], 500);
+            return Helper::handleExceptions($th);
         }
     }
 

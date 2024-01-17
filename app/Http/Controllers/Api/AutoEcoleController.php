@@ -22,8 +22,9 @@ class AutoEcoleController extends Controller
      */
     public function index()
     {
-        $autoEcoles =  AutoEcoleResource::collection(AutoEcole::paginate());
-        return $autoEcoles;
+        // validate token & auth user & user->autoEcoles
+        $autoEcoles =  AutoEcole::paginate();
+        return AutoEcoleResource::collection($autoEcoles);
     }
 
     /**
