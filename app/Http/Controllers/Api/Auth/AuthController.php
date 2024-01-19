@@ -6,6 +6,7 @@ use App\Helpers\Helper;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -18,12 +19,12 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'required|string|between:2,100',
-            'phone' => 'required|string|min:10|regex:/^(06|07)\d{8}$/',
-            'email' => 'required|string|email|max:100|unique:users',
-            'password' => 'required|string|confirmed|min:6',
-            'city' => 'required|string',
-            'reason' =>  'required|string',
+            'name' => ['required', 'string', 'between:2,100'],
+            'phone' => ['required', 'string', 'min:10', 'regex:/^(06|07)\d{8}$/'],
+            'email' => ['required', 'string', 'email', 'max:100', 'unique:users'],
+            'password' => ['required', 'string', 'confirmed', 'min:6'],
+            'city' => ['required', 'string'],
+            'reason' =>  ['required', 'string'],
         ]);
         if ($validator->fails()) {
             return Helper::handleValidationErrors($validator);
@@ -33,8 +34,11 @@ class AuthController extends Controller
             // $user = User::create($request->validated());
             $user = new User;
             $user->setAttributes($validator->validated());
-            # har code to assign condidat role
-            // $user->addRole('condidat');
+            $role = Role::where('name', 'candidate')->first();
+            $user->addRole($role);
+            $user->save();
+            # har code to assign candidate role
+            // $user->addRole('candidate');
             // $user->setMeta('city', "test city");
             // $user->setMeta('reason', "test reason");
             // $user->saveMeta();
@@ -45,10 +49,7 @@ class AuthController extends Controller
                 "message" => "user created successfully"
             ]);
         } catch (\Throwable $th) {
-
-            return response()->json([
-                "error" => $th->getMessage(),
-            ], 500);
+            return Helper::handleExceptions($th);
         }
     }
 
@@ -64,9 +65,7 @@ class AuthController extends Controller
             #response
             return $this->responseWithToken($token, $credentials, "logged in successfully");
         } catch (\Throwable $th) {
-            return response()->json([
-                "error" => $th->getMessage(),
-            ], 500);
+            return Helper::handleExceptions($th);
         }
     }
 
@@ -76,9 +75,7 @@ class AuthController extends Controller
         try {
             return $this->responseWithToken(Auth::refresh(), Auth::user()->only('name', 'email'), "new access token generated successfully");
         } catch (\Throwable $th) {
-            return response()->json([
-                "error" => $th->getMessage(),
-            ], 500);
+            return Helper::handleExceptions($th);
         }
     }
 
@@ -96,10 +93,7 @@ class AuthController extends Controller
                 "user" => $credentials,
             ]);
         } catch (\Throwable $th) {
-            return response()->json([
-                'message' => 'server error',
-                'error' => $th->getMessage(),
-            ], 500);
+            return Helper::handleExceptions($th);
         }
     }
 

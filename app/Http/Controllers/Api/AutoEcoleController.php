@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Helpers\Helper;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreAutoEcoleRequest;
 use App\Http\Requests\UpdateAutoEcoleRequest;
@@ -32,16 +33,15 @@ class AutoEcoleController extends Controller
      */
     public function store(StoreAutoEcoleRequest $request)
     {
-        AutoEcole::create([
-            'name' => $request->name,
-            'gerant_id' => auth()->user()->id,
-            'permis_list' => $request->permis_list,
-        ]);
-
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Auto ecole created successfully'
-        ], 201);
+        try {
+            AutoEcole::create([
+                'name' => $request->name,
+                'gerant_id' => auth()->user()->id,
+                'permis_list' => $request->permis_list,
+            ]);
+        } catch (\Throwable $th) {
+            return Helper::handleSuccessMessage("Auto ecole created successfully");
+        }
     }
 
     /**
@@ -49,13 +49,17 @@ class AutoEcoleController extends Controller
      */
     public function show(AutoEcole $autoEcole)
     {
-        $autoEcole = AutoEcole::find($autoEcole)->first();
-        $user = auth()->user();
+        try {
+            $autoEcole = AutoEcole::find($autoEcole)->first();
+            $user = auth()->user();
 
-        if ($user->hasRole("gerant") && $autoEcole->gerant_id === $user->id) {
-            return new AutoEcoleResource($autoEcole);
-        } else {
-            return response()->json(['message' => 'Unauthorized'], 403);
+            if ($user->hasRole("gerant") && $autoEcole->gerant_id === $user->id) {
+                return new AutoEcoleResource($autoEcole);
+            } else {
+                return response()->json(['message' => 'Unauthorized'], 403);
+            }
+        } catch (\Throwable $th) {
+            return Helper::handleExceptions($th);
         }
     }
 
@@ -64,14 +68,18 @@ class AutoEcoleController extends Controller
      */
     public function update(UpdateAutoEcoleRequest $request, AutoEcole $autoEcole)
     {
-        $autoEcole->update([
-            'name' => $request->name,
-            'permis_list' => $request->permis_list,
-        ]);
-        return response()->json([
-            'message' => 'Updated success',
-            'data' => new AutoEcoleResource($autoEcole),
-        ]);
+        try {
+            $autoEcole->update([
+                'name' => $request->name,
+                'permis_list' => $request->permis_list,
+            ]);
+            return response()->json([
+                'message' => 'Updated success',
+                'data' => new AutoEcoleResource($autoEcole),
+            ]);
+        } catch (\Throwable $th) {
+            return Helper::handleExceptions($th);
+        }
     }
 
     /**
@@ -79,7 +87,12 @@ class AutoEcoleController extends Controller
      */
     public function destroy(AutoEcole $autoEcole)
     {
-        $autoEcole->delete();
-        return response()->json(['message' => 'Deleted Success'], 204);
+        try {
+            $autoEcole->delete();
+            // return response()->json(['message' => 'Deleted Success'], 204);
+            return Helper::handleSuccessMessage("Deleted Success");
+        } catch (\Throwable $th) {
+            return Helper::handleExceptions($th);
+        }
     }
 }

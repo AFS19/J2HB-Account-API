@@ -12,13 +12,21 @@ return [
     'truncate_tables' => true,
 
     'roles_structure' => [
-        'admin' => [
+        'superAdmin' => [
             'users' => 'c,r,u,d',
             'payments' => 'c,r,u,d',
             'auto_ecoles' => 'c,r,u,d',
         ],
-        'gerant' => [
+        'admin' => [
+            'payments' => 'c,r,u,d',
+            'auto_ecoles' => 'c,r,u,d',
+        ],
+        'superGerant' => [
             'users' => 'c,r,u,d',
+            'auto_ecoles' => 'c,r,u',
+            'work_process' => 'c,r,u,d'
+        ],
+        'gerant' => [
             'auto_ecoles' => 'c,r,u',
             'work_process' => 'c,r,u,d'
         ],
@@ -26,7 +34,7 @@ return [
             'profile' => 'r,u',
             'auto_ecoles' => 'r',
         ],
-        'condidat' => [
+        'candidate' => [
             'auto_ecoles' => 'r',
             'work_process' => 'r'
         ],

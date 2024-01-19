@@ -18,22 +18,32 @@ class DatabaseSeeder extends Seeder
         # seed roles
         $this->call(LaratrustSeeder::class);
 
-        # admin user
-        $admin = \App\Models\User::factory()->create([
-            'name' => 'admin',
+        # super admin user
+        $superAdmin = \App\Models\User::factory()->create([
+            'name' => 'super admin',
             'phone' => '0600000001',
             'email' => 'admin@j2hb.com',
             'password' => 'j2hb2024'
         ]);
-        $admin->addRole('admin');
+        $superAdmin->addRole('superAdmin');
+        // $admin->givePermissions([
+        //     "users-create", "users-red", "users-update", "users-delete",
+        //     "payments-create", "payments-red", "payments-update", "payments-delete",
+        //     "auto_ecoles-create", "auto_ecoles-red", "auto_ecoles-update", "auto_ecoles-delete",
+        // ]);
 
         # gerant user
-        $gerant = \App\Models\User::factory()->create([
-            'name' => 'gerant',
+        $superGerant = \App\Models\User::factory()->create([
+            'name' => 'super gerant',
             'phone' => '0600000002',
             'email' => 'gerant@j2hb.com',
             'password' => 'j2hb2024'
         ]);
-        $gerant->addRole('gerant');
+        $superGerant->addRole('superGerant');
+        // $superGerent->givePermissions([
+        //     "users-create", "users-red", "users-update", "users-delete",
+        //     "auto_ecoles-create", "auto_ecoles-red", "auto_ecoles-update",
+        //     "work_process-create", "work_process-red", "work_process-update", "work_process-delete",
+        // ]);
     }
 }
