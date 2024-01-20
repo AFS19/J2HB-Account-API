@@ -37,7 +37,7 @@ class AuthController extends Controller
             $role = Role::where('name', 'candidate')->first();
             $user->addRole($role);
             $user->save();
-            # har code to assign candidate role
+            # assign candidate role
             // $user->addRole('candidate');
             // $user->setMeta('city', "test city");
             // $user->setMeta('reason', "test reason");

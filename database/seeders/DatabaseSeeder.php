@@ -22,28 +22,42 @@ class DatabaseSeeder extends Seeder
         $superAdmin = \App\Models\User::factory()->create([
             'name' => 'super admin',
             'phone' => '0600000001',
-            'email' => 'admin@j2hb.com',
+            'email' => 'superadmin@j2hb.com',
             'password' => 'j2hb2024'
         ]);
         $superAdmin->addRole('superAdmin');
-        // $admin->givePermissions([
-        //     "users-create", "users-red", "users-update", "users-delete",
-        //     "payments-create", "payments-red", "payments-update", "payments-delete",
-        //     "auto_ecoles-create", "auto_ecoles-red", "auto_ecoles-update", "auto_ecoles-delete",
-        // ]);
+        $superAdminPermissions = [
+            "users-create",
+            "users-read",
+            "users-update",
+            "users-delete",
+            "payments-create",
+            "payments-read",
+            "payments-update",
+            "payments-delete",
+            "auto_ecoles-create",
+            "auto_ecoles-read",
+            "auto_ecoles-update",
+            "auto_ecoles-delete",
+        ];
+        $superAdmin->syncPermissions($superAdminPermissions);
+        // foreach ($superAdminPermissions as $permission) {
+        //     $superAdmin->permissions()->attach(\App\Models\Permission::where('name', $permission)->first()->id);
+        // }
 
         # gerant user
         $superGerant = \App\Models\User::factory()->create([
             'name' => 'super gerant',
             'phone' => '0600000002',
-            'email' => 'gerant@j2hb.com',
+            'email' => 'supergerant@j2hb.com',
             'password' => 'j2hb2024'
         ]);
         $superGerant->addRole('superGerant');
-        // $superGerent->givePermissions([
-        //     "users-create", "users-red", "users-update", "users-delete",
-        //     "auto_ecoles-create", "auto_ecoles-red", "auto_ecoles-update",
-        //     "work_process-create", "work_process-red", "work_process-update", "work_process-delete",
-        // ]);
+        $geratPermissions = [
+            "users-create", "users-read", "users-update", "users-delete",
+            "auto_ecoles-create", "auto_ecoles-read", "auto_ecoles-update",
+            "work_process-create", "work_process-read", "work_process-update", "work_process-delete",
+        ];
+        $superGerant->syncPermissions($geratPermissions);
     }
 }

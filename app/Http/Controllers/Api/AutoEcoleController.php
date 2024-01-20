@@ -8,6 +8,8 @@ use App\Http\Requests\StoreAutoEcoleRequest;
 use App\Http\Requests\UpdateAutoEcoleRequest;
 use App\Http\Resources\AutoEcoleResource;
 use App\Models\AutoEcole;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 use function PHPUnit\Framework\isEmpty;
 
@@ -15,7 +17,10 @@ class AutoEcoleController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('gerant');
+        $this->middleware("permission:auto_ecoles-create")->only("store");
+        $this->middleware("permission:auto_ecoles-read")->only("index", "show");
+        $this->middleware("permission:auto_ecoles-update")->only("update");
+        $this->middleware("permission:auto_ecoles-delete")->only("destroy");
     }
 
     /**
@@ -29,6 +34,20 @@ class AutoEcoleController extends Controller
     }
 
     /**
+     * Display all specified user auto ecoles
+     */
+    public function monAutoEcoles()
+    {
+        $user = Auth()->user();
+        try {
+            $autoEcoles = AutoEcole::where("id", $user->id);
+            return AutoEcoleResource::collection($autoEcoles);
+        } catch (\Throwable $th) {
+            return Helper::handleExceptions($th);
+        }
+    }
+
+    /**
      * Store a newly created resource in storage.
      */
     public function store(StoreAutoEcoleRequest $request)
@@ -39,8 +58,9 @@ class AutoEcoleController extends Controller
                 'gerant_id' => auth()->user()->id,
                 'permis_list' => $request->permis_list,
             ]);
-        } catch (\Throwable $th) {
             return Helper::handleSuccessMessage("Auto ecole created successfully");
+        } catch (\Throwable $th) {
+            return Helper::handleExceptions($th);
         }
     }
 
@@ -52,8 +72,7 @@ class AutoEcoleController extends Controller
         try {
             $autoEcole = AutoEcole::find($autoEcole)->first();
             $user = auth()->user();
-
-            if ($user->hasRole("gerant") && $autoEcole->gerant_id === $user->id) {
+            if ($user->isAbleTo("auto_ecoles-read") && $autoEcole->gerant_id === $user->id) {
                 return new AutoEcoleResource($autoEcole);
             } else {
                 return response()->json(['message' => 'Unauthorized'], 403);

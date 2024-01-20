@@ -20,6 +20,7 @@ Route::group(["middleware" => "auth:api"], function () {
 
 
     Route::apiResource('autoEcoles', AutoEcoleController::class);
+    Route::get("ma-auto-ecoles", [AutoEcoleController::class, "monAutoEcoles"]);
     // Route::controller(AutoEcoleController::class)->group(function () {
     //     Route::get('autoEcoles', 'index')->name('list_auto_ecole');
     //     Route::get('autoEcoles/{autoEcole}', 'show')->name('show_auto_ecole');
