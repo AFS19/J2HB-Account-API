@@ -18,7 +18,6 @@ Route::group(["middleware" => "auth:api"], function () {
     Route::get('refresh', [AuthController::class, 'refreshToken'])->name("refreshToken");
     Route::get('logout', [AuthController::class, 'logout'])->name("logout");
 
-
     Route::apiResource('autoEcoles', AutoEcoleController::class);
     Route::get("ma-auto-ecoles", [AutoEcoleController::class, "monAutoEcoles"]);
     // Route::controller(AutoEcoleController::class)->group(function () {

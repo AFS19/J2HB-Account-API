@@ -34,9 +34,9 @@ class AuthController extends Controller
             // $user = User::create($request->validated());
             $user = new User;
             $user->setAttributes($validator->validated());
+            $user->save();
             $role = Role::where('name', 'candidate')->first();
             $user->addRole($role);
-            $user->save();
             # assign candidate role
             // $user->addRole('candidate');
             // $user->setMeta('city', "test city");

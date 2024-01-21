@@ -86,10 +86,13 @@ class AutoEcoleController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(AutoEcole $autoEcole)
+    public function show($autoEcole)
     {
         try {
-            $autoEcole = AutoEcole::find($autoEcole)->first();
+            $autoEcole = AutoEcole::find($autoEcole);
+            if (!$autoEcole) {
+                return Helper::handleNotFound("Auto Ecole Not Found :(");
+            }
             $user = auth()->user();
             if ($user->isAbleTo("auto_ecoles-read") && $autoEcole->gerant_id === $user->id) {
                 return new AutoEcoleResource($autoEcole);
@@ -119,7 +122,7 @@ class AutoEcoleController extends Controller
     //         return Helper::handleExceptions($th);
     //     }
     // }
-    public function update(Request $request, AutoEcole $autoEcole)
+    public function update(Request $request, $autoEcole)
     {
         $validator = Validator::make($request->all(), [
             'name' => ['required', 'string', 'max:100'],
@@ -127,6 +130,10 @@ class AutoEcoleController extends Controller
         ]);
         if ($validator->fails()) {
             return Helper::handleValidationErrors($validator);
+        }
+        $autoEcole = AutoEcole::find($autoEcole);
+        if (!$autoEcole) {
+            return Helper::handleNotFound("Auto Ecole Not Found :(");
         }
         try {
             $autoEcole->update($validator->validate());
@@ -138,8 +145,12 @@ class AutoEcoleController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(AutoEcole $autoEcole)
+    public function destroy($autoEcole)
     {
+        $autoEcole = AutoEcole::find($autoEcole);
+        if (!$autoEcole) {
+            return Helper::handleNotFound("Auto Ecole Not Found :(");
+        }
         try {
             $autoEcole->delete();
             // return response()->json(['message' => 'Deleted Success'], 204);
