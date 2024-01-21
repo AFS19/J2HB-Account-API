@@ -44,10 +44,7 @@ class AuthController extends Controller
             // $user->saveMeta();
 
             # return success response
-            return response()->json([
-                "status" => "success",
-                "message" => "user created successfully"
-            ]);
+            return Helper::handleSuccessMessage("user created successfully");
         } catch (\Throwable $th) {
             return Helper::handleExceptions($th);
         }
