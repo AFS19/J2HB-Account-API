@@ -3,6 +3,8 @@
 use App\Http\Controllers\Api\Auth\AuthController;
 use App\Http\Controllers\Api\AutoEcoleController;
 use App\Http\Controllers\Api\WorkProcessController;
+use App\Http\Controllers\SuperAdminController;
+use App\Http\Controllers\SuperGerantController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -17,6 +19,21 @@ Route::group(["middleware" => "auth:api"], function () {
     Route::get('profile', [AuthController::class, 'profile'])->name("profile");
     Route::get('refresh', [AuthController::class, 'refreshToken'])->name("refreshToken");
     Route::get('logout', [AuthController::class, 'logout'])->name("logout");
+
+
+    // Super Admin routes
+    Route::group([], function () {
+        Route::post('/super-admin/create-admin/{role}', [SuperAdminController::class, 'createUser']);
+        Route::get('/super-admin/handle-admins/{role}', [SuperAdminController::class, 'handleUsers']);
+    });
+
+    // Super Gerant routes
+    Route::group([], function () {
+        Route::post('/super-gerant/create-user/{role}', [SuperGerantController::class, 'createUser']);
+        Route::get('/super-gerant/handle-users/{role}', [SuperGerantController::class, 'handleUsers']);
+    });
+
+
 
     Route::apiResource('autoEcoles', AutoEcoleController::class);
     Route::get("ma-auto-ecoles", [AutoEcoleController::class, "monAutoEcoles"]);

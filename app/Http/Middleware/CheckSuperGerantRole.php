@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
-class CheckGerantRole
+class CheckSuperGerantRole
 {
     /**
      * Handle an incoming request.
@@ -16,8 +16,8 @@ class CheckGerantRole
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (!Auth::check() || !Auth::user()->hasRole("gerant")) {
-            return response()->json(['message' => 'Unauthorized only for Gerant'], 403);
+        if (!Auth::check() || !Auth::user()->hasRole("superGerant")) {
+            return response()->json(['message' => 'Unauthorized only for super gerant'], 403);
         }
 
         return $next($request);

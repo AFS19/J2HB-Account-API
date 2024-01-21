@@ -53,11 +53,11 @@ class DatabaseSeeder extends Seeder
             'password' => 'j2hb2024'
         ]);
         $superGerant->addRole('superGerant');
-        $geratPermissions = [
+        $superGeratPermissions = [
             "users-create", "users-read", "users-update", "users-delete",
             "auto_ecoles-create", "auto_ecoles-read", "auto_ecoles-update",
             "work_process-create", "work_process-read", "work_process-update", "work_process-delete",
         ];
-        $superGerant->syncPermissions($geratPermissions);
+        $superGerant->syncPermissions($superGeratPermissions);
     }
 }
